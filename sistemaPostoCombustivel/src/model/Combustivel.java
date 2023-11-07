@@ -5,6 +5,7 @@ public enum Combustivel {
 	OLEO_DIESEL("Oleo Diesel"), GASOLINA_COMUM("Gasolina Comum"), GASOLINA_ADITIVADA("Gasolina Aditivada"), ETANOL("Etanol");
 	
 	private String nome;
+	private float preco;
 
 	private Combustivel(String nome) {
 		this.setNome(nome);
@@ -17,6 +18,18 @@ public enum Combustivel {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
+	public float getPreco() {
+		return preco;
+	}
+
+	public void setPreco(float preco) {
+		this.preco = preco;
+	}
 	
+	public double calcularCombustivel(String quantidade, Combustivel combustivel) {
+		double total = Double.valueOf(quantidade) * Double.valueOf(combustivel.getPreco());
+		return total;
+	}
 
 }
