@@ -12,6 +12,7 @@ import javax.swing.border.TitledBorder;
 import excecoes.Excecoes;
 import model.Combustivel;
 import model.OleoMotor;
+import model.PostoCombustivel;
 
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EtchedBorder;
@@ -80,12 +81,11 @@ public class JanelaPostoCombustivel extends JFrame {
 		JPanel TabelaCombustivel = new JPanel();
 		TabelaCombustivel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Tabela de Preco do Combustivel", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		
-		JPanel OleoMotorLabel = new JPanel();
-		OleoMotorLabel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Oleo Motor", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		
-		
 		JPanel TabelaOleoMotor = new JPanel();
 		TabelaOleoMotor.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Tabela de Preco do Oleo Motor", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		
+		JPanel OleoMotorLabel = new JPanel();
+		OleoMotorLabel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Oleo Motor", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		
 		JPanel Abastecimento = new JPanel();
 		Abastecimento.setToolTipText("Selecionar");
@@ -93,6 +93,10 @@ public class JanelaPostoCombustivel extends JFrame {
 		
 		JPanel FormasPagamento = new JPanel();
 		FormasPagamento.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Formas de Pagamento", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		
+		// Objeto PostoCombustivel
+		
+		PostoCombustivel p = new PostoCombustivel();
 		
 		//RadioButton
 		
