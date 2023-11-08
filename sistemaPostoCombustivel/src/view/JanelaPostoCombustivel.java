@@ -17,8 +17,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
 import javax.swing.JButton;
-import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
@@ -29,8 +29,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.InputMethodListener;
-import java.awt.event.InputMethodEvent;
+import javax.swing.SwingConstants;
 
 public class JanelaPostoCombustivel extends JFrame {
 
@@ -76,6 +75,8 @@ public class JanelaPostoCombustivel extends JFrame {
 
 		setContentPane(contentPane);
 		
+		// JPanel
+		
 		JPanel TabelaCombustivel = new JPanel();
 		TabelaCombustivel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Tabela de Preco do Combustivel", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		
@@ -93,51 +94,7 @@ public class JanelaPostoCombustivel extends JFrame {
 		JPanel FormasPagamento = new JPanel();
 		FormasPagamento.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Formas de Pagamento", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		
-		
-		JLabel lblCombustivel = new JLabel("Combustivel:");
-		
-		JLabel lblLitros = new JLabel("Quantidade Litros:");
-		
-		JLabel lblCombustivelTotal = new JLabel("Total Combustivel:");
-		
-		txtQuantidadeLitros = new JTextField();
-		txtQuantidadeLitros.setColumns(10);
-		
-		JLabel lblTotalCombustivel = new JLabel("-");
-		
-		JLabel lblOleo500 = new JLabel("Frasco 500ml:");
-		
-		JLabel lblOleo1 = new JLabel("Frasco 1L:");
-		
-		txtPrecoOleo500 = new JTextField();
-		txtPrecoOleo500.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				float preco = Float.valueOf(txtPrecoOleo500.getText());
-				OleoMotor.OLEO_500.setPreco(preco);
-			}
-		});
-		txtPrecoOleo500.setText("");
-		txtPrecoOleo500.setColumns(10);
-		
-		txtPrecoOleo1 = new JTextField();
-		txtPrecoOleo1.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				float preco = Float.valueOf(txtPrecoOleo1.getText());
-				OleoMotor.OLEO_1.setPreco(preco);
-			}
-		});
-		txtPrecoOleo1.setColumns(10);
-		
-		JLabel lblDias = new JLabel("Dias:");
-		
-		txtDias = new JTextField();
-		txtDias.setColumns(10);
-		
-		JLabel lblTotalPagar = new JLabel("Total a pagar:");
-		
-		JLabel lblTotal = new JLabel("-");
+		//RadioButton
 		
 		JRadioButton rdbtnVista = new JRadioButton("À vista");
 		buttonGroup.add(rdbtnVista);
@@ -145,24 +102,46 @@ public class JanelaPostoCombustivel extends JFrame {
 		JRadioButton rdbtnPrazo = new JRadioButton("À prazo");
 		buttonGroup.add(rdbtnPrazo);
 		
+		//JLabel
+		
+		JLabel lblCombustivel = new JLabel("Combustivel:");
+		
+		JLabel lblLitros = new JLabel("Quantidade Litros:");
+		
+		JLabel lblCombustivelTotal = new JLabel("Total Combustivel:");
+		
+		JLabel lblTotalCombustivel = new JLabel("-");
+		lblTotalCombustivel.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		JLabel lblOleo500 = new JLabel("Frasco 500ml:");
+		
+		JLabel lblOleo1 = new JLabel("Frasco 1L:");
+		
+		JLabel lblDias = new JLabel("Dias:");
+		
+		JLabel lblTotalPagar = new JLabel("Total a pagar:");
+		
+		JLabel lblTotal = new JLabel("-");
+		lblTotal.setHorizontalAlignment(SwingConstants.CENTER);
+		
 		JLabel lblFrasco500 = new JLabel("Frasco de 500ml");
 		
 		JLabel lblFrasco1 = new JLabel("Frasco de 1L");
 		
-		txtQuantidadeOleo1 = new JTextField();
-		txtQuantidadeOleo1.setColumns(10);
+		JLabel lblValorOleo1 = new JLabel("-");
+		lblValorOleo1.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		JLabel lblTotalOleo = new JLabel("Total Oleo");
 		
 		JLabel lblQuantidade = new JLabel("Quantidade");
 		
 		JLabel lblValorPagar = new JLabel("Valor a pagar");
 		
-		JLabel lblValorOleo1 = new JLabel("-");
-		
-		JLabel lblTotalOleo = new JLabel("Total Oleo");
-		
 		JLabel lblOleoTotal = new JLabel("-");
+		lblOleoTotal.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JLabel lblValorOleo500 = new JLabel("-");
+		lblValorOleo500.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JLabel lblOleoDiesel = new JLabel("Óleo diesel:");
 		
@@ -170,64 +149,132 @@ public class JanelaPostoCombustivel extends JFrame {
 		
 		JLabel lblGasAditivada = new JLabel("Gasolina Aditivada:");
 		
-		txtQuantidadeOleo500 = new JTextField();
-		txtQuantidadeOleo500.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if(OleoMotor.OLEO_500.getPreco() < 0) {
-					Excecoes.preencherPreco();
-				} else {
-					float quantidade = Float.valueOf(txtQuantidadeOleo500.getText());
-					Double valor500 = OleoMotor.OLEO_500.calcularOleo500(quantidade);
-					lblValorOleo500.setText(String.format(String.valueOf(valor500)));
-				}
-			}
-		});
-		txtQuantidadeOleo500.setColumns(10);
+		JLabel lblEtanol = new JLabel("Etanol:");
+		
+		//Text
 		
 		
 		txtPrecoDiesel = new JTextField();
-		txtPrecoDiesel.addKeyListener(new KeyAdapter() {
+		txtPrecoDiesel.addFocusListener(new FocusAdapter() {
 			@Override
-			public void keyReleased(KeyEvent e) {
-				float preco = Float.valueOf(txtPrecoDiesel.getText());
+			public void focusLost(FocusEvent e) {
+				float preco = 0;
+				try {
+					preco = Float.parseFloat(txtPrecoDiesel.getText());
+				} catch(Exception ex2){
+					JOptionPane.showMessageDialog(null, "O tipo do preço precisa ser float.");
+					return;
+				}
 				Combustivel.OLEO_DIESEL.setPreco(preco);
 			}
 		});
 		txtPrecoDiesel.setColumns(10);
 		
-		JLabel lblEtanol = new JLabel("Etanol:");
-		
 		txtPrecoGasComum = new JTextField();
-		txtPrecoGasComum.addKeyListener(new KeyAdapter() {
+		txtPrecoGasComum.addFocusListener(new FocusAdapter() {
 			@Override
-			public void keyReleased(KeyEvent e) {
-				float preco = Float.valueOf(txtPrecoGasComum.getText());
+			public void focusLost(FocusEvent e) {
+				float preco = Float.parseFloat(txtPrecoGasComum.getText());
 				Combustivel.GASOLINA_COMUM.setPreco(preco);
 			}
 		});
 		txtPrecoGasComum.setColumns(10);
 		
 		txtPrecoGasAditivada = new JTextField();
-		txtPrecoGasAditivada.addKeyListener(new KeyAdapter() {
+		txtPrecoGasAditivada.addFocusListener(new FocusAdapter() {
 			@Override
-			public void keyReleased(KeyEvent e) {
-				float preco = Float.valueOf(txtPrecoGasAditivada.getText());
+			public void focusLost(FocusEvent e) {
+				float preco = 0;
+				try {
+					preco = Float.parseFloat(txtPrecoGasAditivada.getText());
+				} catch(Exception ex2){
+					JOptionPane.showMessageDialog(null, "O tipo do preço precisa ser float.");
+					return;
+				}
 				Combustivel.GASOLINA_ADITIVADA.setPreco(preco);
 			}
 		});
 		txtPrecoGasAditivada.setColumns(10);
 		
 		txtPrecoEtanol = new JTextField();
-		txtPrecoEtanol.addKeyListener(new KeyAdapter() {
+		txtPrecoEtanol.addFocusListener(new FocusAdapter() {
 			@Override
-			public void keyReleased(KeyEvent e) {
-				float preco = Float.valueOf(txtPrecoEtanol.getText());
+			public void focusLost(FocusEvent e) {
+				float preco = 0;
+				try {
+					preco = Float.parseFloat(txtPrecoEtanol.getText());
+				} catch(Exception ex2){
+					JOptionPane.showMessageDialog(null, "O tipo do preço precisa ser float.");
+					return;
+				}
 				Combustivel.ETANOL.setPreco(preco);
 			}
 		});
 		txtPrecoEtanol.setColumns(10);
 	
+		txtPrecoOleo500 = new JTextField();
+		txtPrecoOleo500.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				float preco = 0;
+				try {
+					preco = Float.parseFloat(txtPrecoOleo500.getText());
+				} catch(Exception ex2){
+					JOptionPane.showMessageDialog(null, "O tipo do preço precisa ser float.");
+					return;
+				}
+				OleoMotor.OLEO_500.setPreco(preco);
+			}
+		});
+		txtPrecoOleo500.setText("");
+		txtPrecoOleo500.setColumns(10);
+		
+		txtPrecoOleo1 = new JTextField();
+		txtPrecoOleo1.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				float preco = 0;
+				try {
+					preco = Float.parseFloat(txtPrecoOleo1.getText());
+				} catch(Exception ex2){
+					JOptionPane.showMessageDialog(null, "O tipo do preço precisa ser float.");
+					return;
+				}
+				OleoMotor.OLEO_1.setPreco(preco);
+			}
+		});
+		txtPrecoOleo1.setColumns(10);
+		
+		txtQuantidadeOleo500 = new JTextField();
+		txtQuantidadeOleo500.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				float quantidade = Float.parseFloat(txtQuantidadeOleo500.getText());
+				Double valor500 = OleoMotor.OLEO_500.calcularOleo500(quantidade);
+				lblValorOleo500.setText(String.valueOf(valor500));
+			}
+		});
+		txtQuantidadeOleo500.setColumns(10);
+		
+		txtQuantidadeOleo1 = new JTextField();
+		txtQuantidadeOleo1.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				float quantidade = Float.parseFloat(txtQuantidadeOleo1.getText());
+				Double valor1 = OleoMotor.OLEO_1.calcularOleo1(quantidade);
+				lblValorOleo1.setText(String.format(String.valueOf(valor1)));
+				Double total = OleoMotor.OLEO_1.calcularTotalOleo(Double.valueOf(lblValorOleo500.getText()), valor1);
+				lblOleoTotal.setText(String.valueOf(total));
+			}
+		});
+		txtQuantidadeOleo1.setColumns(10);
+		
+		txtQuantidadeLitros = new JTextField();
+		txtQuantidadeLitros.setColumns(10);
+		
+		txtDias = new JTextField();
+		txtDias.setColumns(10);
+		
 		JButton btnNovoCalculo = new JButton("Novo Calculo");
 		
 		JButton btnFechar = new JButton("Fechar");
@@ -253,17 +300,17 @@ public class JanelaPostoCombustivel extends JFrame {
 					.addGap(35)
 					.addGroup(gl_Abastecimento.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_Abastecimento.createSequentialGroup()
-							.addComponent(lblLitros)
-							.addGap(30)
-							.addComponent(txtQuantidadeLitros, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_Abastecimento.createSequentialGroup()
 							.addComponent(lblCombustivel)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(comboBoxCombustivel, 0, 172, Short.MAX_VALUE))
+							.addComponent(comboBoxCombustivel, 0, 170, Short.MAX_VALUE))
 						.addGroup(gl_Abastecimento.createSequentialGroup()
-							.addComponent(lblCombustivelTotal)
-							.addGap(72)
-							.addComponent(lblTotalCombustivel)))
+							.addGroup(gl_Abastecimento.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblLitros)
+								.addComponent(lblCombustivelTotal))
+							.addGap(30)
+							.addGroup(gl_Abastecimento.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(lblTotalCombustivel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(txtQuantidadeLitros, Alignment.LEADING))))
 					.addContainerGap())
 		);
 		gl_Abastecimento.setVerticalGroup(
@@ -323,17 +370,17 @@ public class JanelaPostoCombustivel extends JFrame {
 					.addGroup(gl_FormasPagamento.createParallelGroup(Alignment.LEADING)
 						.addComponent(rdbtnVista)
 						.addComponent(rdbtnPrazo))
-					.addPreferredGap(ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
 					.addComponent(lblDias)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(txtDias, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(18))
-				.addGroup(gl_FormasPagamento.createSequentialGroup()
+				.addGroup(Alignment.LEADING, gl_FormasPagamento.createSequentialGroup()
 					.addGap(78)
 					.addComponent(lblTotalPagar)
 					.addGap(18)
-					.addComponent(lblTotal)
-					.addContainerGap(83, Short.MAX_VALUE))
+					.addComponent(lblTotal, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(55, Short.MAX_VALUE))
 		);
 		gl_FormasPagamento.setVerticalGroup(
 			gl_FormasPagamento.createParallelGroup(Alignment.LEADING)
@@ -378,21 +425,17 @@ public class JanelaPostoCombustivel extends JFrame {
 							.addGroup(gl_OleoMotorLabel.createParallelGroup(Alignment.LEADING)
 								.addComponent(txtQuantidadeOleo1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(txtQuantidadeOleo500, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+					.addGap(72)
 					.addGroup(gl_OleoMotorLabel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_OleoMotorLabel.createSequentialGroup()
-							.addGap(72)
-							.addComponent(lblValorPagar)
-							.addGap(74)
-							.addComponent(lblTotalOleo, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap(88, Short.MAX_VALUE))
-						.addGroup(gl_OleoMotorLabel.createSequentialGroup()
-							.addGap(98)
-							.addGroup(gl_OleoMotorLabel.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblValorOleo1, GroupLayout.PREFERRED_SIZE, 4, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblValorOleo500, GroupLayout.PREFERRED_SIZE, 4, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED, 132, Short.MAX_VALUE)
-							.addComponent(lblOleoTotal, GroupLayout.PREFERRED_SIZE, 4, GroupLayout.PREFERRED_SIZE)
-							.addGap(124))))
+						.addComponent(lblValorPagar)
+						.addGroup(gl_OleoMotorLabel.createParallelGroup(Alignment.TRAILING, false)
+							.addComponent(lblValorOleo1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(lblValorOleo500, GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)))
+					.addGap(64)
+					.addGroup(gl_OleoMotorLabel.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblTotalOleo, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblOleoTotal, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(85, Short.MAX_VALUE))
 		);
 		gl_OleoMotorLabel.setVerticalGroup(
 			gl_OleoMotorLabel.createParallelGroup(Alignment.LEADING)
@@ -404,19 +447,18 @@ public class JanelaPostoCombustivel extends JFrame {
 						.addComponent(lblTotalOleo))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_OleoMotorLabel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_OleoMotorLabel.createSequentialGroup()
-							.addGroup(gl_OleoMotorLabel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblFrasco500)
-								.addComponent(txtQuantidadeOleo500, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_OleoMotorLabel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_OleoMotorLabel.createParallelGroup(Alignment.BASELINE)
-									.addComponent(lblFrasco1)
-									.addComponent(txtQuantidadeOleo1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addComponent(lblValorOleo1)))
+						.addGroup(gl_OleoMotorLabel.createParallelGroup(Alignment.BASELINE)
+							.addComponent(lblFrasco500)
+							.addComponent(txtQuantidadeOleo500, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_OleoMotorLabel.createParallelGroup(Alignment.BASELINE)
 							.addComponent(lblOleoTotal)
 							.addComponent(lblValorOleo500)))
+					.addGap(18)
+					.addGroup(gl_OleoMotorLabel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_OleoMotorLabel.createParallelGroup(Alignment.BASELINE)
+							.addComponent(lblFrasco1)
+							.addComponent(txtQuantidadeOleo1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(lblValorOleo1))
 					.addContainerGap(11, Short.MAX_VALUE))
 		);
 		OleoMotorLabel.setLayout(gl_OleoMotorLabel);
