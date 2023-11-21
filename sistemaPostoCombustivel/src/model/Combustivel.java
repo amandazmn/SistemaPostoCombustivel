@@ -26,10 +26,5 @@ public enum Combustivel {
 	public void setPreco(float preco) {
 		this.preco = preco;
 	}
-	
-	public double calcularCombustivel(String quantidade, Combustivel combustivel) {
-		double total = Double.valueOf(quantidade) * Double.valueOf(combustivel.getPreco());
-		return total;
-	}
 
 }
