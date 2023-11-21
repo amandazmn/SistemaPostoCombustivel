@@ -9,10 +9,8 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.TitledBorder;
 
-import excecoes.Excecoes;
 import model.Combustivel;
-import model.OleoMotor;
-import model.PostoCombustivel;
+import model.SistemaPostoCombustivel;
 
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EtchedBorder;
@@ -26,8 +24,6 @@ import javax.swing.ButtonGroup;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import javax.swing.SwingConstants;
@@ -96,14 +92,26 @@ public class JanelaPostoCombustivel extends JFrame {
 		
 		// Objeto PostoCombustivel
 		
-		PostoCombustivel p = new PostoCombustivel();
+		SistemaPostoCombustivel p = new SistemaPostoCombustivel();
 		
 		//RadioButton
 		
 		JRadioButton rdbtnVista = new JRadioButton("À vista");
+		rdbtnVista.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtDias.setEnabled(false);
+				txtDias.setEditable(false);
+			}
+		});
 		buttonGroup.add(rdbtnVista);
 		
 		JRadioButton rdbtnPrazo = new JRadioButton("À prazo");
+		rdbtnPrazo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtDias.setEnabled(true);
+				txtDias.setEditable(true);
+			}
+		});
 		buttonGroup.add(rdbtnPrazo);
 		
 		//JLabel
@@ -155,9 +163,17 @@ public class JanelaPostoCombustivel extends JFrame {
 		
 		JLabel lblEtanol = new JLabel("Etanol:");
 		
+		// ComboBox
+		
+		JComboBox<Combustivel> comboBoxCombustivel = new JComboBox<Combustivel>();
+		comboBoxCombustivel.setToolTipText("");
+		comboBoxCombustivel.addItem(Combustivel.OLEO_DIESEL);
+		comboBoxCombustivel.addItem(Combustivel.ETANOL);
+		comboBoxCombustivel.addItem(Combustivel.GASOLINA_ADITIVADA);
+		comboBoxCombustivel.addItem(Combustivel.GASOLINA_COMUM);
+		
 		//Text
-		
-		
+	
 		txtPrecoDiesel = new JTextField();
 		txtPrecoDiesel.addFocusListener(new FocusAdapter() {
 			@Override
@@ -227,7 +243,7 @@ public class JanelaPostoCombustivel extends JFrame {
 					JOptionPane.showMessageDialog(null, "O tipo do preço precisa ser float.");
 					return;
 				}
-				OleoMotor.OLEO_500.setPreco(preco);
+				p.setPrecoOleo500(preco);;
 			}
 		});
 		txtPrecoOleo500.setText("");
@@ -244,7 +260,7 @@ public class JanelaPostoCombustivel extends JFrame {
 					JOptionPane.showMessageDialog(null, "O tipo do preço precisa ser float.");
 					return;
 				}
-				OleoMotor.OLEO_1.setPreco(preco);
+				p.setPrecoOleo1(preco);;
 			}
 		});
 		txtPrecoOleo1.setColumns(10);
@@ -253,9 +269,15 @@ public class JanelaPostoCombustivel extends JFrame {
 		txtQuantidadeOleo500.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				float quantidade = Float.parseFloat(txtQuantidadeOleo500.getText());
-				Double valor500 = OleoMotor.OLEO_500.calcularOleo500(quantidade);
-				lblValorOleo500.setText(String.valueOf(valor500));
+				p.setQuantidadeOleo500(Float.parseFloat(txtQuantidadeOleo500.getText()));
+				p.calcularValorPagarOleo500(p);
+				lblValorOleo500.setText(String.valueOf(p.getValorPagarOleo500()));
+				if(p.getValorPagarOleo1() != 0) {
+					p.calcularTotalOleo(p);
+					lblOleoTotal.setText(String.valueOf(p.getTotalOleo()));
+				} else {
+					lblOleoTotal.setText(String.valueOf(p.getValorPagarOleo500()));
+				}
 			}
 		});
 		txtQuantidadeOleo500.setColumns(10);
@@ -264,38 +286,96 @@ public class JanelaPostoCombustivel extends JFrame {
 		txtQuantidadeOleo1.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				float quantidade = Float.parseFloat(txtQuantidadeOleo1.getText());
-				Double valor1 = OleoMotor.OLEO_1.calcularOleo1(quantidade);
-				lblValorOleo1.setText(String.format(String.valueOf(valor1)));
-				Double total = OleoMotor.OLEO_1.calcularTotalOleo(Double.valueOf(lblValorOleo500.getText()), valor1);
-				lblOleoTotal.setText(String.valueOf(total));
+				p.setQuantidadeOleo1(Float.parseFloat(txtQuantidadeOleo1.getText()));
+				p.calcularValorPagarOleo1(p);
+				lblValorOleo1.setText(String.valueOf(p.getValorPagarOleo1()));
+				if(p.getValorPagarOleo500() != 0) {
+					p.calcularTotalOleo(p);
+					lblOleoTotal.setText(String.valueOf(p.getTotalOleo()));
+				} else {
+					lblOleoTotal.setText(String.valueOf(p.getValorPagarOleo1()));
+				}
 			}
 		});
 		txtQuantidadeOleo1.setColumns(10);
 		
 		txtQuantidadeLitros = new JTextField();
+		txtQuantidadeLitros.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				float quantidade = 0;
+				try {
+					quantidade = Float.parseFloat(txtQuantidadeLitros.getText());
+				} catch(Exception ex2){
+					JOptionPane.showMessageDialog(null, "O tipo do preço precisa ser float.");
+					return;
+				}
+				p.setQuantidadeLitros(quantidade);
+				Combustivel cSelecionado = (Combustivel) comboBoxCombustivel.getSelectedItem();
+				p.calcularCombustivel(p, cSelecionado);
+				lblTotalCombustivel.setText(String.valueOf(p.getTotalCombustivel()));
+			}
+		});
 		txtQuantidadeLitros.setColumns(10);
 		
 		txtDias = new JTextField();
+		txtDias.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(Integer.parseInt(txtDias.getText()) < 30) {
+					JOptionPane.showMessageDialog(null, "Pagamento a prazo em 30 dias ou mais.");
+					return;
+				}
+				p.setDias(Integer.parseInt(txtDias.getText()));
+			}
+		});
 		txtDias.setColumns(10);
 		
 		JButton btnNovoCalculo = new JButton("Novo Calculo");
+		btnNovoCalculo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {						
+				lblValorOleo1.setText("-");
+				lblValorOleo500.setText("-");
+				lblOleoTotal.setText("-");
+				lblTotalCombustivel.setText("-");
+				lblTotal.setText("-");	
+				
+				txtDias.setText(null);
+				txtPrecoDiesel.setText(null);
+				txtPrecoEtanol.setText(null);
+				txtPrecoGasAditivada.setText(null);
+				txtPrecoGasComum.setText(null);
+				txtPrecoOleo1.setText(null);
+				txtPrecoOleo500.setText(null);
+				txtQuantidadeLitros.setText(null);
+				txtQuantidadeOleo1.setText(null);
+				txtQuantidadeOleo500.setText(null);
+				
+				buttonGroup.clearSelection();
+			}
+		});
 		
 		JButton btnFechar = new JButton("Fechar");
+		btnFechar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+			}
+		});
 		
 		JButton btnCalcular = new JButton("Calcular");
 		btnCalcular.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				if(rdbtnVista.isSelected()) {
+					p.calcularTotalVista(p);
+					lblTotal.setText(String.valueOf(p.getTotal()));
+				}
+				if(rdbtnPrazo.isSelected()) {
+					p.calcularTotalPrazo(p);
+					lblTotal.setText(String.valueOf(p.getTotal()));
+				}
 			}
 		});
 		
-		JComboBox<Combustivel> comboBoxCombustivel = new JComboBox<Combustivel>();
-		comboBoxCombustivel.setToolTipText("");
-		comboBoxCombustivel.addItem(Combustivel.OLEO_DIESEL);
-		comboBoxCombustivel.addItem(Combustivel.ETANOL);
-		comboBoxCombustivel.addItem(Combustivel.GASOLINA_ADITIVADA);
-		comboBoxCombustivel.addItem(Combustivel.GASOLINA_COMUM);
 		
 		GroupLayout gl_Abastecimento = new GroupLayout(Abastecimento);
 		gl_Abastecimento.setHorizontalGroup(
