@@ -166,6 +166,16 @@ public class JanelaPostoCombustivel extends JFrame {
 		// ComboBox
 		
 		JComboBox<Combustivel> comboBoxCombustivel = new JComboBox<Combustivel>();
+		comboBoxCombustivel.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(p.getQuantidadeLitros() != 0) {
+					Combustivel cSelecionado = (Combustivel) comboBoxCombustivel.getSelectedItem();
+					p.calcularCombustivel(p, cSelecionado);
+					lblTotalCombustivel.setText(String.valueOf(p.getTotalCombustivel()));
+				}
+			}
+		});
 		comboBoxCombustivel.setToolTipText("");
 		comboBoxCombustivel.addItem(Combustivel.OLEO_DIESEL);
 		comboBoxCombustivel.addItem(Combustivel.ETANOL);
@@ -303,13 +313,7 @@ public class JanelaPostoCombustivel extends JFrame {
 		txtQuantidadeLitros.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				float quantidade = 0;
-				try {
-					quantidade = Float.parseFloat(txtQuantidadeLitros.getText());
-				} catch(Exception ex2){
-					JOptionPane.showMessageDialog(null, "O tipo do preço precisa ser float.");
-					return;
-				}
+				float quantidade = Float.parseFloat(txtQuantidadeLitros.getText());
 				p.setQuantidadeLitros(quantidade);
 				Combustivel cSelecionado = (Combustivel) comboBoxCombustivel.getSelectedItem();
 				p.calcularCombustivel(p, cSelecionado);
@@ -322,9 +326,8 @@ public class JanelaPostoCombustivel extends JFrame {
 		txtDias.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				if(Integer.parseInt(txtDias.getText()) < 30) {
-					JOptionPane.showMessageDialog(null, "Pagamento a prazo em 30 dias ou mais.");
-					return;
+				if(Integer.parseInt(txtDias.getText()) > 30) {
+					JOptionPane.showMessageDialog(null, "Pagamento a prazo mais de 30 dias juros de 10%.");
 				}
 				p.setDias(Integer.parseInt(txtDias.getText()));
 			}

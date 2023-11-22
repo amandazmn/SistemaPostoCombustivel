@@ -39,7 +39,7 @@ public class SistemaPostoCombustivel {
 	
 	public void calcularTotalPrazo(SistemaPostoCombustivel p) {
 		float total = p.totalCombustivel + p.totalOleo;
-		if(p.getDias() == 30) {
+		if(p.getDias() <= 30) {
 			p.setTotal(total);
 		}
 		if(p.getDias() > 30) {
